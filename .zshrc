@@ -1,19 +1,18 @@
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH=/Users/daniel/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-# ZSH_THEME="crunch"
-# ZSH_THEME="ys"
-# ZSH_THEME="sorin"
-# ZSH_THEME="norm"
-ZSH_THEME="mgutz"
-
+ZSH_THEME="spaceship"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
@@ -54,7 +53,7 @@ plugins=(git)
 
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -81,15 +80,57 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
-
-
-#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-[[ -s "/Users/gatero/.gvm/bin/gvm-init.sh" ]] && source "/Users/gatero/.gvm/bin/gvm-init.sh"
-
-source ~/projects/shell/main.sh
-alias cap_api="rsync -avz --exclude-from /Users/gatero/projects/vinco/inspira/inspira-api/rsync_ignore /Users/gatero/projects/vinco/inspira/inspira-api/. cap:/media/preloaded/api"
-alias cap_front="rsync -avz /Users/gatero/projects/vinco/inspira/inspira-app/dist/. cap:/media/preloaded/frontend"
-
-export NVM_DIR="/Users/gatero/.nvm"
+export NVM_DIR="/Users/daniel/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# added by me
+# export default editor
+export EDITOR=mvim
+export GPG_TTY=`tty`
+
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export GOSRC=$GOPATH/src
+export GOPKG=$GOPATH/pkg
+export PATH=$PATH:$GOBIN
+# export LC_CTYPE=C
+# export LANG=C
+
+# git
+alias gs='git status '
+alias ga='git add '
+alias gb='git branch '
+alias gc='git commit'
+alias gd='git diff'
+alias gco='git checkout '
+
+# axs app
+alias axsapi="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/axs/axs-api/. amazon:/home/ubuntu/sites/axs/api"
+alias axsapip="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/axs/axs-api/. axsapi:/var/www/vhosts/api.axsweb.io/public"
+alias axsfront="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/axs/axs-front/dist/. amazon:/home/ubuntu/sites/axs/front"
+alias axsfrontp="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/axs/axs-front/dist/. axsfront:/var/www/vhosts/axsweb.io/public"
+
+alias marketapi="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/inspira/market-api/. amazon:/home/ubuntu/sites/inspira-market-api/"
+alias marketfront="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/inspira/market-front/dist/. amazon:/home/ubuntu/sites/inspira-market-front/"
+
+alias dofront="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/sites/daniel-ortega/daniel-ortega-front/. do:/root/sites/prueba"
+
+alias cap_api="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/inspira/inspira-api/. cap:/media/preloaded/api.redaula.com/public"
+alias cap_app="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/inspira/inspira-app/. cap:/media/preloaded/redaula.com/public"
+
+alias creator_front="rsync -avz --exclude-from ~/ignore-config/.rsyncignore ~/projects/vinco/inspira/creator-app/dist/. amazon:/home/ubuntu/sites/creator"
+
+alias cuco_api="rsync -avz --progress --exclude-from ~/ignore-config/.rsyncignore ~/projects/github.com/vinco/cuco/cuco-api/. amazon:/home/ubuntu/sites/cuco/cuco-api"
+alias cuco_front="rsync -avz --progress --exclude-from ~/ignore-config/.rsyncignore ~/projects/github.com/vinco/cuco/cuco-front/dist/* amazon:/home/ubuntu/sites/cuco/cuco-front/."
+###-tns-completion-start-###
+if [ -f /Users/daniel/.tnsrc ]; then
+    source /Users/daniel/.tnsrc
+fi
+###-tns-completion-end-###
+export PATH=$PATH:~/npm/bin
+export NODE_PATH=:/home/daniel/npm/lib/node_modules
+export MYVIMRC=~/.vimrc
+alias vime='vim $MYVIMRC'

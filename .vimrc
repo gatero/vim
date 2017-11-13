@@ -1,5 +1,10 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
+autocmd BufEnter * :syn sync maxlines=500
+set nocursorcolumn
+set nocursorline
+set norelativenumber
+syntax sync minlines=256
 
 set encoding=utf-8
 scriptencoding utf-8
@@ -26,20 +31,25 @@ Plugin 'scrooloose/syntastic'              " Syntastic
 Plugin 'ervandew/supertab'                 " Super tab
 Plugin 'mattn/emmet-vim'                   " Emmet
 Plugin 'terryma/vim-multiple-cursors'      " Multiple cursor
+Plugin 'godlygeek/tabular'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'thaerkh/vim-indentguides'
+Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'wvffle/vimterm'
+Plugin 'xuyuanp/nerdtree-git-plugin'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'Raimondi/delimitMate'              " Delimit mate
-Plugin 'digitaltoad/vim-pug'               " Jade syntax
 Plugin 'ryanoasis/vim-devicons'            " Devicons
-" Plugin 'powerline/powerline'               " Powerline
-" Plugin 'itchyny/lightline.vim'             " status line
 Plugin 'othree/html5.vim'                  " HTML5 syntax
 Plugin 'skammer/vim-css-color'             " show styles colors
 Plugin 'fatih/vim-go'
-" Plugin 'Valloric/YouCompleteMe'            " autocomplete
-Plugin 'luochen1990/rainbow'               " Higlight brackets
+Plugin 'Valloric/YouCompleteMe'            " autocomplete
 Plugin 'junegunn/vim-emoji'
 Plugin 'majutsushi/tagbar'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'chemzqm/vim-jsx-improve'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -66,6 +76,12 @@ hi ColorColumn ctermbg=234 guibg=#293739
 execute pathogen#infect()
 call pathogen#helptags()
 
+"vimterm
+nnoremap <silent> <F4> :call vimterm#exec('g++  -o /tmp/out' . expand('%')) <CR>
+nnoremap <silent> <F5> :call vimterm#exec('/tmp/out') <CR>
+
+nnoremap <F7> :call vimterm#toggle() <CR>
+tnoremap <F7> <C-\><C-n>:call vimterm#toggle() <CR>
 
 " Higlight current column.
 au WinLEave * set nocursorcolumn
@@ -74,6 +90,7 @@ au BufNewFile,BufRead *.ejs set filetype=html
 
 " Line break
 " set guifont=Monaco:h8
+set synmaxcol=200
 set t_Co=256                    " This is may or may not needed.
 set background=dark             " Theme background
 set wrap linebreak nolist       " Warp text
@@ -105,11 +122,13 @@ set listchars=trail:·,tab:»»    " trail: Character to show for trailing space
 set guioptions-=r               " remove right-hand scroll bar"
 set guioptions-=L               " remove left-hand scroll bar"
 set softtabstop=2
+set rtp+=$GOPATH/src/github.com/golang/lint/misc/vim
 
 " Status line
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+set noswapfile
 
 " Scroll Configuration
 "nmap <ScrollWheelUp> <nop>
@@ -137,28 +156,33 @@ set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusl
 "
 " Replace :emoji_name: into Emojis:
 " "%s/:\([^:]\+\):/\=emoji#for(submatch(1), submatch(0))/g
-silent! if emoji#available()
-  let g:gitgutter_sign_added=emoji#for('small_blue_diamond')
-  let g:gitgutter_sign_modified=emoji#for('small_orange_diamond')
-  let g:gitgutter_sign_removed=emoji#for('small_red_triangle')
-  let g:gitgutter_sign_modified_removed=emoji#for('collision')
-endif
-set completefunc=emoji#complete
+"silent! if emoji#available()
+""  let g:gitgutter_sign_added=emoji#for('small_blue_diamond')
+""  let g:gitgutter_sign_modified=emoji#for('small_orange_diamond')
+""  let g:gitgutter_sign_removed=emoji#for('small_red_triangle')
+""  let g:gitgutter_sign_modified_removed=emoji#for('collision')
+"endif
+"set completefunc=emoji#complete
 
 " Nerdtree
 nmap <F2> :NERDTreeToggle<CR>
 
 " Syntastic
-let g:syntastic_always_populate_loc_list=0
-let g:syntastic_auto_loc_list=0
-let g:syntastic_check_on_open=1
-let g:syntastic_check_on_wq=0
-let g:syntastic_scss_checkers=['']
-let g:syntastic_html_checkers=['']
-let g:syntastic_auto_jump=1
-let g:syntastic_enable_balloons=1
-let g:syntastic_error_symbol=emoji#for('red_circle')
-let g:syntastic_warning_symbol=emoji#for('warning')
+"let g:syntastic_always_populate_loc_list=0
+"let g:syntastic_auto_loc_list=0
+"let g:syntastic_check_on_open=0
+"let g:syntastic_check_on_wq=0
+"let g:syntastic_scss_checkers=['']
+"let g:syntastic_html_checkers=['']
+"let g:syntastic_auto_jump=0
+"let g:syntastic_enable_balloons=0
+"let g:syntastic_error_symbol=emoji#for('red_circle')
+"let g:syntastic_warning_symbol=emoji#for('warning')
+let g:syntastic_quiet_messages = { "type": "style" }
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
 
 " Supertab
 let g:SuperTabDefaultCompletionType="context"
@@ -178,6 +202,7 @@ endfunction
 call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#282C34')
 call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#282C34')
 call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#282C34')
+call NERDTreeHighlightFile('go', 'blue', 'none', '#3366FF', '#282C34')
 call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#282C34')
 call NERDTreeHighlightFile('config', 'brown', 'none', 'brown', '#282C34')
 call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#282C34')
@@ -199,32 +224,6 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhitespace /\s\+$/
-
-"0 if you want to enable it later via :RainbowToggle
-let g:rainbow_active=1
-let g:rainbow_conf={
-\   'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
-\   'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-\   'operators': '_,_',
-\   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-\   'separately': {
-\       '*': {},
-\       'tex': {
-\           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-\       },
-\       'lisp': {
-\           'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-\       },
-\       'vim': {
-\           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-\       },
-\       'html': {
-\           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-\       },
-\       'css': 0,
-\   }
-\}
-
 
 let g:gitgutter_sign_column_always=1
 " :AirlineRefresh
@@ -315,3 +314,75 @@ let g:tagbar_type_css = {
         \ 'i:identities'
     \ ]
 \ }
+
+" golang
+autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
+highlight LineNr ctermfg=grey
+highlight Comment ctermfg=lightgrey
+
+" ctrlp
+let g:ctrlp_working_path_mode = 'ra'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/     " MacOSX/Linux
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'node':  '\v(node_modules)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ }
+let g:go_fmt_command = "goimports"
+let g:go_highlight_types       = 1
+let g:go_highlight_fields      = 1
+let g:go_highlight_functions   = 1
+let g:go_highlight_methods     = 1
+let g:go_highlight_operators   = 1
+let g:go_highlight_extra_types = 1
+
+
+"
+"highlight clear SignColumn
+"highlight GitGutterAdd ctermfg=green
+"highlight GitGutterChange ctermfg=yellow
+"highlight GitGutterDelete ctermfg=red
+"highlight GitGutterChangeDelete ctermfg=yellow
+let g:ctrlp_user_command = 'find %s -type f'
+"
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+let g:NERDTreeShowIgnoredStatus = 1
+" tabularize
+let mapleader=','
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
+"easymotion
+map <Leader> <Plug>(easymotion-prefix)
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+"indent
+let g:indentguides_ignorelist = ['text']
+let g:indentguides_spacechar = '┆'
+let g:indentguides_tabchar = '|'

@@ -1,10 +1,18 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-autocmd BufEnter * :syn sync maxlines=500
-set nocursorcolumn
-set nocursorline
-set norelativenumber
-syntax sync minlines=256
+" Theme
+syntax on
+set background=dark
+set termguicolors
+colorscheme material-monokai
+
+hi ColorColumn ctermbg=234 guibg=#293739
+
+"autocmd BufEnter * :syn sync maxlines=500
+"set nocursorcolumn
+"set nocursorline
+"set norelativenumber
+"syntax sync minlines=256
 
 set encoding=utf-8
 scriptencoding utf-8
@@ -32,24 +40,31 @@ Plugin 'ervandew/supertab'                 " Super tab
 Plugin 'mattn/emmet-vim'                   " Emmet
 Plugin 'terryma/vim-multiple-cursors'      " Multiple cursor
 Plugin 'godlygeek/tabular'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'plasticboy/vim-markdown'
+"Plugin 'easymotion/vim-easymotion'
+"Plugin 'plasticboy/vim-markdown'
 Plugin 'thaerkh/vim-indentguides'
-Plugin 'dhruvasagar/vim-table-mode'
-Plugin 'wvffle/vimterm'
+"Plugin 'dhruvasagar/vim-table-mode'
+"Plugin 'wvffle/vimterm'
 Plugin 'xuyuanp/nerdtree-git-plugin'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'Raimondi/delimitMate'              " Delimit mate
 Plugin 'ryanoasis/vim-devicons'            " Devicons
 Plugin 'othree/html5.vim'                  " HTML5 syntax
-Plugin 'skammer/vim-css-color'             " show styles colors
 Plugin 'fatih/vim-go'
 Plugin 'Valloric/YouCompleteMe'            " autocomplete
-Plugin 'junegunn/vim-emoji'
+"Plugin 'junegunn/vim-emoji'
 Plugin 'majutsushi/tagbar'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'djoshea/vim-autoread'
+Plugin 'flowtype/vim-flow'
+Plugin 'skammer/vim-css-color'             " show styles colors
+Plugin 'cakebaker/scss-syntax.vim'
+Plugin 'pangloss/vim-javascript'
 Plugin 'chemzqm/vim-jsx-improve'
+Plugin 'mxw/vim-jsx'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plugin 'ctrlpvim/ctrlp.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -66,22 +81,16 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-" Theme
-syntax on
-colorscheme onedark
-
-hi ColorColumn ctermbg=234 guibg=#293739
-
 " PATHOGEN
 execute pathogen#infect()
 call pathogen#helptags()
 
 "vimterm
-nnoremap <silent> <F4> :call vimterm#exec('g++  -o /tmp/out' . expand('%')) <CR>
-nnoremap <silent> <F5> :call vimterm#exec('/tmp/out') <CR>
+"nnoremap <silent> <F4> :call vimterm#exec('g++  -o /tmp/out' . expand('%')) <CR>
+"nnoremap <silent> <F5> :call vimterm#exec('/tmp/out') <CR>
 
-nnoremap <F7> :call vimterm#toggle() <CR>
-tnoremap <F7> <C-\><C-n>:call vimterm#toggle() <CR>
+"nnoremap <F7> :call vimterm#toggle() <CR>
+"tnoremap <F7> <C-\><C-n>:call vimterm#toggle() <CR>
 
 " Higlight current column.
 au WinLEave * set nocursorcolumn
@@ -109,14 +118,14 @@ set smartcase                   " ignore case if search pattern is all lowercase
 set smarttab                    " insert tabs on the start of a line according to shiftwidth, not tabstop
 set hlsearch                    " highlight search terms
 set incsearch                   " show search matches as you type
-set history=10000                " remember more commands and search history
-set undolevels=10000             " use many muchos levels of undo
+set history=1000                " remember more commands and search history
+set undolevels=1000             " use many muchos levels of undo
 set wildignore=*.swp,*.bak,*.pyc,*.class " ignore this extensions
 set title                       " change the terminal's title
 set visualbell                  " don't beep
 set noerrorbells                " don't beep
 set cursorline                  " hightlight current line
-"set wildmenu                    " visual autocomplete for command menu
+""set wildmenu                    " visual autocomplete for command menu
 "set list                        " ordered sequence of items
 set listchars=trail:·,tab:»»    " trail: Character to show for trailing spaces, tab: two characters to be used to show a tab.
 set guioptions-=r               " remove right-hand scroll bar"
@@ -185,39 +194,41 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 1
 
 " Supertab
-let g:SuperTabDefaultCompletionType="context"
+"let g:SuperTabDefaultCompletionType="context"
 
 " Emmet
+let g:user_emmet_mode='a'    "enable all function in all mode.
 let g:user_emmet_leader_key='<C-Z>'
+let g:emmet_html5 = 0
 
 " HTML 5
 let g:html5_event_handler_attributes_complete=1
 
 " NERDTress File highlighting
-function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
-  exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
-  exec 'autocmd FileType nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
-endfunction
+"function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+  "exec 'autocmd FileType nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+  "exec 'autocmd FileType nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+"endfunction
 
-call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#282C34')
-call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#282C34')
-call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#282C34')
-call NERDTreeHighlightFile('go', 'blue', 'none', '#3366FF', '#282C34')
-call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#282C34')
-call NERDTreeHighlightFile('config', 'brown', 'none', 'brown', '#282C34')
-call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#282C34')
-call NERDTreeHighlightFile('json', 'cyan', 'none', 'cyan', '#282C34')
-call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#282C34')
-call NERDTreeHighlightFile('styl', 'Magenta', 'none', 'Magenta', '#282C34')
-call NERDTreeHighlightFile('css', 'Magenta', 'none', 'Magenta', '#282C34')
-call NERDTreeHighlightFile('coffee', 'Gray', 'none', 'Gray', '#282C34')
-call NERDTreeHighlightFile('js', 'yellow', 'none', 'yellow', '#282C34')
-call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#282C34')
-call NERDTreeHighlightFile('ds_store', 'Gray', 'none', '#686868', '#282C34')
-call NERDTreeHighlightFile('gitconfig', 'Gray', 'none', '#686868', '#282C34')
-call NERDTreeHighlightFile('gitignore', 'Gray', 'none', '#686868', '#282C34')
-call NERDTreeHighlightFile('bashrc', 'Gray', 'none', '#686868', '#282C34')
-call NERDTreeHighlightFile('bashprofile', 'Gray', 'none', '#686868', '#282C34')
+"call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#282C34')
+"call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#282C34')
+"call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#282C34')
+"call NERDTreeHighlightFile('go', 'blue', 'none', '#3366FF', '#282C34')
+"call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#282C34')
+"call NERDTreeHighlightFile('config', 'brown', 'none', 'brown', '#282C34')
+"call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#282C34')
+"call NERDTreeHighlightFile('json', 'cyan', 'none', 'cyan', '#282C34')
+"call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#282C34')
+"call NERDTreeHighlightFile('styl', 'Magenta', 'none', 'Magenta', '#282C34')
+"call NERDTreeHighlightFile('css', 'Magenta', 'none', 'Magenta', '#282C34')
+"call NERDTreeHighlightFile('coffee', 'Gray', 'none', 'Gray', '#282C34')
+"call NERDTreeHighlightFile('js', 'yellow', 'none', 'yellow', '#282C34')
+"call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#282C34')
+"call NERDTreeHighlightFile('ds_store', 'Gray', 'none', '#686868', '#282C34')
+"call NERDTreeHighlightFile('gitconfig', 'Gray', 'none', '#686868', '#282C34')
+"call NERDTreeHighlightFile('gitignore', 'Gray', 'none', '#686868', '#282C34')
+"call NERDTreeHighlightFile('bashrc', 'Gray', 'none', '#686868', '#282C34')
+"call NERDTreeHighlightFile('bashprofile', 'Gray', 'none', '#686868', '#282C34')
 
 " highlight trailing whitespace
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -244,6 +255,9 @@ let g:webdevicons_enable_unite=1
 let g:webdevicons_enable_flagship_statusline=1
 let g:WebDevIconsNerdTreeGitPluginForceVAlign=1
 let g:webdevicons_conceal_nerdtree_brackets=1
+let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "passive_filetypes": ["go"] }
 
 if exists("g:loaded_webdevicons")
   call webdevicons#refresh()
@@ -273,61 +287,58 @@ let g:airline_symbols.notexists = '∄'
 let g:airline_symbols.whitespace = 'Ξ'
 
 " Tagbar
-nmap <F3> :TagbarToggle<CR>
-let g:tagbar_autoclose = 1
-let g:tagbar_type_coffee = {
-    \ 'ctagstype' : 'coffee',
-    \ 'kinds'     : [
-        \ 'c:classes',
-        \ 'm:methods',
-        \ 'f:functions',
-        \ 'v:variables',
-        \ 'f:fields',
-    \ ]
-\ }
-let g:tagbar_type_markdown = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:Heading_L1',
-        \ 'i:Heading_L2',
-        \ 'k:Heading_L3'
-    \ ]
-\ }
-let g:tagbar_type_typescript = {
-  \ 'ctagstype': 'typescript',
-  \ 'kinds': [
-    \ 'c:classes',
-    \ 'n:modules',
-    \ 'f:functions',
-    \ 'v:variables',
-    \ 'v:varlambdas',
-    \ 'm:members',
-    \ 'i:interfaces',
-    \ 'e:enums',
-  \ ]
-\ }
-let g:tagbar_type_css = {
-\ 'ctagstype' : 'Css',
-    \ 'kinds'     : [
-        \ 'c:classes',
-        \ 's:selectors',
-        \ 'i:identities'
-    \ ]
-\ }
+"nmap <F3> :TagbarToggle<CR>
+"let g:tagbar_autoclose = 1
+"let g:tagbar_type_coffee = {
+    "\ 'ctagstype' : 'coffee',
+    "\ 'kinds'     : [
+        "\ 'c:classes',
+        "\ 'm:methods',
+        "\ 'f:functions',
+        "\ 'v:variables',
+        "\ 'f:fields',
+    "\ ]
+"\ }
+"let g:tagbar_type_markdown = {
+    "\ 'ctagstype' : 'markdown',
+    "\ 'kinds' : [
+        "\ 'h:Heading_L1',
+        "\ 'i:Heading_L2',
+        "\ 'k:Heading_L3'
+    "\ ]
+"\ }
+"let g:tagbar_type_typescript = {
+  "\ 'ctagstype': 'typescript',
+  "\ 'kinds': [
+    "\ 'c:classes',
+    "\ 'n:modules',
+    "\ 'f:functions',
+    "\ 'v:variables',
+    "\ 'v:varlambdas',
+    "\ 'm:members',
+    "\ 'i:interfaces',
+    "\ 'e:enums',
+  "\ ]
+"\ }
+"let g:tagbar_type_css = {
+"\ 'ctagstype' : 'Css',
+    "\ 'kinds'     : [
+        "\ 'c:classes',
+        "\ 's:selectors',
+        "\ 'i:identities'
+    "\ ]
+"\ }
 
 " golang
-autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
+"autocmd BufWritePost,FileWritePost *.go execute 'Lint' | cwindow
 highlight LineNr ctermfg=grey
 highlight Comment ctermfg=lightgrey
 
 " ctrlp
 let g:ctrlp_working_path_mode = 'ra'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/     " MacOSX/Linux
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'node':  '\v(node_modules)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ }
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*     " MacOSX/Linux
+let g:ctrlp_custom_ignore = 'node_modules/|DS_Store/|.git'
+" golang
 let g:go_fmt_command = "goimports"
 let g:go_highlight_types       = 1
 let g:go_highlight_fields      = 1
@@ -367,22 +378,30 @@ if exists(":Tabularize")
   vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
 "easymotion
-map <Leader> <Plug>(easymotion-prefix)
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
+"map <Leader> <Plug>(easymotion-prefix)
+"" <Leader>f{char} to move to {char}
+"map  <Leader>f <Plug>(easymotion-bd-f)
+"nmap <Leader>f <Plug>(easymotion-overwin-f)
 
 " s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-overwin-f2)
+"nmap s <Plug>(easymotion-overwin-f2)
 
-" Move to line
-map <Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader>L <Plug>(easymotion-overwin-line)
+"" Move to line
+"map <Leader>L <Plug>(easymotion-bd-jk)
+"nmap <Leader>L <Plug>(easymotion-overwin-line)
 
-" Move to word
-map  <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
+"" Move to word
+"map  <Leader>w <Plug>(easymotion-bd-w)
+"nmap <Leader>w <Plug>(easymotion-overwin-w)
 "indent
 let g:indentguides_ignorelist = ['text']
 let g:indentguides_spacechar = '┆'
 let g:indentguides_tabchar = '|'
+" flow
+let g:flow#enable = 1
+let g:javascript_plugin_flow = 1
+" theme
+let g:materialmonokai_italic=1
+let g:airline_theme='materialmonokai'
+" jsx
+let g:jsx_ext_required = 0
